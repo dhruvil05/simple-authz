@@ -1,0 +1,12 @@
+{
+  "name": "simple-authz",
+  "version": "1.0.0",
+  "description": "Simple, secure and scalable authorization library",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "lib/index.js"
+  },
+  "keywords": [],
+  "author": "Dhruvil",
+  "license": "MIT"
+}
