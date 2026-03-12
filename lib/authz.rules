@@ -1,0 +1,6 @@
+allow admin *
+
+allow broker publish listing
+allow broker feature listing
+
+allow user view listing

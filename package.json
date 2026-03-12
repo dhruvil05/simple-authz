@@ -4,9 +4,11 @@
   "description": "Simple, secure and scalable authorization library",
   "main": "lib/index.js",
   "scripts": {
-    "test": "lib/index.js"
+    "test": "node bin/test.js",
+    "dev": "node lib/index.js"
   },
   "keywords": [],
   "author": "Dhruvil",
-  "license": "MIT"
+  "license": "MIT",
+  "type": "commonjs"
 }

@@ -1,0 +1,18 @@
+rule
+  role admin
+  action *
+  resource *
+end
+
+rule
+  role broker
+  action publish
+  resource listing
+end
+
+rule
+  role user
+  action edit
+  resource listing
+  condition listing.owner_id == user.id
+end
