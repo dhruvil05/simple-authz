@@ -1,5 +1,3 @@
-
-````markdown
 # Simple Authz
 
 A lightweight and flexible **authorization engine for Node.js** built around a simple policy language called **TOON (Token-Oriented Object Notation)**.
@@ -12,24 +10,24 @@ The goal of this project is to make authorization **simple, fast, readable, and 
 
 # Table of Contents
 
-- Overview
-- Why Simple Authz
-- Key Features
-- Installation
-- Quick Start
-- Core Concepts
-- Policy Language (TOON)
-- Policy Examples
-- Using Conditions
-- Working with Roles
-- Authorization API
-- Example Integrations
-- Project Structure
-- Performance
-- Security Model
-- Roadmap
-- Contributing
-- License
+* Overview
+* Why Simple Authz
+* Key Features
+* Installation
+* Quick Start
+* Core Concepts
+* Policy Language (TOON)
+* Policy Examples
+* Using Conditions
+* Working with Roles
+* Authorization API
+* Example Integrations
+* Project Structure
+* Performance
+* Security Model
+* Roadmap
+* Contributing
+* License
 
 ---
 
@@ -41,7 +39,7 @@ Most applications implement authorization like this:
 if(user.role === "admin") { ... }
 if(user.id === listing.owner_id) { ... }
 if(user.permissions.includes("edit_listing")) { ... }
-````
+```
 
 Over time this logic spreads across many files and becomes difficult to maintain.
 

@@ -1,14 +1,17 @@
 {
   "name": "simple-authz",
-  "version": "1.0.0",
-  "description": "Simple, secure and scalable authorization library",
-  "main": "lib/index.js",
+  "version": "v1.0.0",
+  "description": "Simple authorization engine with TOON policy language",
+  "main": "lib/core/authz.js",
   "scripts": {
     "test": "node bin/test.js",
-    "dev": "node lib/index.js"
+    "dev": "node lib/core/authz.js"
   },
   "keywords": [],
   "author": "Dhruvil",
   "license": "MIT",
-  "type": "commonjs"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dhruvil05/simple-authz"
+  }
 }
