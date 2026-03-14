@@ -1,13 +1,28 @@
 {
   "name": "simple-authz",
-  "version": "v1.0.0",
+  "version": "v1.0.1",
   "description": "Simple authorization engine with TOON policy language",
   "main": "lib/core/authz.js",
   "scripts": {
     "test": "node bin/test.js",
     "dev": "node lib/core/authz.js"
   },
-  "keywords": [],
+  "keywords": [
+    "authorization",
+    "access-control",
+    "auth",
+    "policy-engine",
+    "rbac",
+    "abac",
+    "permissions",
+    "nodejs-auth",
+    "authorization-library",
+    "security",
+    "policy-based-access",
+    "authz",
+    "role-based-access-control",
+    "authorization-engine"
+  ],
   "author": "Dhruvil",
   "license": "MIT",
   "repository": {

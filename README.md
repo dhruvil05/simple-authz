@@ -55,7 +55,7 @@ allow user view listing
 allow broker publish listing
 
 allow broker edit listing
-when listing.owner_id == user.id
+condition listing.owner_id == user.id
 ```
 
 Your application then only needs to ask:
@@ -131,7 +131,7 @@ allow user view listing
 allow broker publish listing
 
 allow broker edit listing
-when listing.owner_id == user.id
+condition listing.owner_id == user.id
 ```
 
 ---
@@ -226,14 +226,14 @@ Syntax:
 
 ```
 allow <role> <action> <resource>
-when <condition>
+condition <condition>
 ```
 
 Example:
 
 ```
 allow broker edit listing
-when listing.owner_id == user.id
+condition listing.owner_id == user.id
 ```
 
 Meaning:
@@ -256,7 +256,7 @@ Example:
 
 ```
 allow user edit profile
-when user.id == resource.id
+condition user.id == resource.id
 ```
 
 ---
@@ -279,7 +279,7 @@ allow broker publish listing
 
 ```
 allow broker edit listing
-when listing.owner_id == user.id
+condition listing.owner_id == user.id
 ```
 
 ---
@@ -294,7 +294,7 @@ allow user view listing
 allow broker publish listing
 
 allow broker edit listing
-when listing.owner_id == user.id
+condition listing.owner_id == user.id
 ```
 
 ---
@@ -499,3 +499,4 @@ MIT License
 Simple Authz was created to simplify authorization logic in modern Node.js applications.
 
 
+# Keywords
