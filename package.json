@@ -1,6 +1,6 @@
 {
   "name": "simple-authz",
-  "version": "v1.0.1",
+  "version": "1.0.3",
   "description": "Simple authorization engine with TOON policy language",
   "main": "lib/core/authz.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "authorization-engine"
   ],
   "author": "Dhruvil",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/dhruvil05/simple-authz"
