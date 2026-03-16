@@ -153,12 +153,57 @@ const allowed = authz.can(user, "edit", "listing", listing)
 Example usage:
 
 ```javascript
-if(authz.can(user,"edit","listing",listing)){
+if(authz.can(user,"edit", "listing", listing)){
     updateListing()
 }else{
     throw new Error("Access denied")
 }
 ```
+
+---
+
+## 5. `authz.explain()` (Optional)
+
+The `authz.explain()` method helps debug authorization decisions by returning detailed information about **why access was allowed or denied**.
+
+Unlike `authz.can()`, which returns only `true` or `false`, this method returns an object explaining the result.
+
+### Usage
+
+```javascript
+authz.explain(user, "edit", "listing", listing)
+```
+
+### Example
+
+```javascript
+const result = authz.explain(user, "edit", "listing", listing)
+
+console.log(result)
+```
+
+### Example Output
+
+```javascript
+{
+  allowed: true,
+  role: "user",
+  resource: "listing",
+  action: "edit",
+  reason: "condition passed"
+}
+```
+
+If no rule matches:
+
+```javascript
+{
+  allowed: false,
+  reason: "no matching rule"
+}
+```
+
+Use `authz.explain()` for **debugging and development**, and `authz.can()` for **regular authorization checks**.
 
 ---
 

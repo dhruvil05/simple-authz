@@ -1,8 +1,8 @@
 {
   "name": "simple-authz",
-  "version": "1.0.3",
-  "description": "Simple authorization engine with TOON policy language",
-  "main": "lib/core/authz.js",
+  "version": "1.0.4",
+  "description": "Lightweight policy-based authorization engine for Node.js using TOON policy language",
+  "main": "lib/index.js",
   "scripts": {
     "test": "node bin/test.js",
     "dev": "node lib/core/authz.js"
@@ -28,5 +28,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/dhruvil05/simple-authz"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/dhruvil05/simple-authz/issues"
+  },
+  "homepage": "https://github.com/dhruvil05/simple-authz#readme"
 }

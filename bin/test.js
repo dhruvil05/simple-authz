@@ -16,3 +16,7 @@ const listing = {
 console.log(
   authz.can(user, "edit", "listing", listing)
 )
+
+const result = authz.explain(user, "edit", "listing", listing)
+
+console.log(result)
