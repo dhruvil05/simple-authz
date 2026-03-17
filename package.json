@@ -1,6 +1,6 @@
 {
   "name": "simple-authz",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Lightweight policy-based authorization engine for Node.js using TOON policy language",
   "main": "lib/index.js",
   "scripts": {
