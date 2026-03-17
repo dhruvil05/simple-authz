@@ -8,26 +8,36 @@ The goal of this project is to make authorization **simple, fast, readable, and 
 
 ---
 
+## ⚠️ Development Status
+
+**simple-authz** is currently under active development.
+
+Some features may change, and there may be inconsistencies between the documentation and the package behavior.
+
+We recommend testing thoroughly before using it in production.
+
+---
+
 # Table of Contents
 
-* Overview
-* Why Simple Authz
-* Key Features
-* Installation
-* Quick Start
-* Core Concepts
-* Policy Language (TOON)
-* Policy Examples
-* Using Conditions
-* Working with Roles
-* Authorization API
-* Example Integrations
-* Project Structure
-* Performance
-* Security Model
-* Roadmap
-* Contributing
-* License
+- Overview
+- Why Simple Authz
+- Key Features
+- Installation
+- Quick Start
+- Core Concepts
+- Policy Language (TOON)
+- Policy Examples
+- Using Conditions
+- Working with Roles
+- Authorization API
+- Example Integrations
+- Project Structure
+- Performance
+- Security Model
+- Roadmap
+- Contributing
+- License
 
 ---
 
@@ -48,20 +58,30 @@ Over time this logic spreads across many files and becomes difficult to maintain
 Example policy file:
 
 ```
-allow admin *
+rule
+  role admin
+  action *
+  resource *
+end
 
-allow user view listing
+rule
+  role broker
+  action publish
+  resource listing
+end
 
-allow broker publish listing
-
-allow broker edit listing
-condition listing.owner_id == user.id
+rule
+  role user
+  action edit
+  resource listing
+  condition listing.owner_id == user.id
+end
 ```
 
 Your application then only needs to ask:
 
 ```javascript
-authz.can(user, "edit", "listing", listing)
+authz.can(user, "edit", "listing", listing);
 ```
 
 ---
@@ -70,24 +90,24 @@ authz.can(user, "edit", "listing", listing)
 
 Benefits of centralized authorization:
 
-* Clear separation between **business logic and security rules**
-* Easy permission updates without touching application code
-* Better maintainability for large projects
-* Safer and more predictable access control
-* Easier onboarding for new developers
+- Clear separation between **business logic and security rules**
+- Easy permission updates without touching application code
+- Better maintainability for large projects
+- Safer and more predictable access control
+- Easier onboarding for new developers
 
 ---
 
 # Key Features
 
-* Simple and readable **policy language**
-* Fast permission lookup
-* Support for **multiple user roles**
-* Logical **conditional rules**
-* Policy **validation**
-* Policy **AST compilation**
-* Lightweight with minimal dependencies
-* Works with any Node.js framework
+- Simple and readable **policy language**
+- Fast permission lookup
+- Support for **multiple user roles**
+- Logical **conditional rules**
+- Policy **validation**
+- Policy **AST compilation**
+- Lightweight with minimal dependencies
+- Works with any Node.js framework
 
 ---
 
@@ -106,9 +126,9 @@ npm install simple-authz
 ## 1. Import the library
 
 ```javascript
-const Authz = require("simple-authz")
+const Authz = require("simple-authz");
 
-const authz = new Authz()
+const authz = new Authz();
 ```
 
 ---
@@ -124,14 +144,24 @@ authz.toon
 Example policy:
 
 ```
-allow admin *
+rule
+  role admin
+  action *
+  resource *
+end
 
-allow user view listing
+rule
+  role broker
+  action publish
+  resource listing
+end
 
-allow broker publish listing
-
-allow broker edit listing
-condition listing.owner_id == user.id
+rule
+  role user
+  action edit
+  resource listing
+  condition listing.owner_id == user.id
+end
 ```
 
 ---
@@ -139,7 +169,7 @@ condition listing.owner_id == user.id
 ## 3. Load the policy
 
 ```javascript
-authz.load("./authz.toon")
+authz.load("./authz.toon");
 ```
 
 ---
@@ -147,16 +177,16 @@ authz.load("./authz.toon")
 ## 4. Check permissions
 
 ```javascript
-const allowed = authz.can(user, "edit", "listing", listing)
+const allowed = authz.can(user, "edit", "listing", listing);
 ```
 
 Example usage:
 
 ```javascript
-if(authz.can(user,"edit", "listing", listing)){
-    updateListing()
-}else{
-    throw new Error("Access denied")
+if (authz.can(user, "edit", "listing", listing)) {
+  updateListing();
+} else {
+  throw new Error("Access denied");
 }
 ```
 
@@ -171,15 +201,15 @@ Unlike `authz.can()`, which returns only `true` or `false`, this method returns 
 ### Usage
 
 ```javascript
-authz.explain(user, "edit", "listing", listing)
+authz.explain(user, "edit", "listing", listing);
 ```
 
 ### Example
 
 ```javascript
-const result = authz.explain(user, "edit", "listing", listing)
+const result = authz.explain(user, "edit", "listing", listing);
 
-console.log(result)
+console.log(result);
 ```
 
 ### Example Output
@@ -236,15 +266,34 @@ Policies are written in **TOON format**.
 Basic rule syntax:
 
 ```
-allow <role> <action> <resource>
+rule
+  role <Role>
+  action <Action>
+  resource <Resource>
+end
 ```
 
 Example:
 
 ```
-allow admin *
-allow user view listing
-allow broker publish listing
+rule
+  role admin
+  action *
+  resource *
+end
+
+rule
+  role broker
+  action publish
+  resource listing
+end
+
+rule
+  role user
+  action edit
+  resource listing
+  condition listing.owner_id == user.id
+end
 ```
 
 ---
@@ -256,7 +305,11 @@ You can use `*` to allow everything.
 Example:
 
 ```
-allow admin *
+rule
+  role admin
+  action *
+  resource *
+end
 ```
 
 This allows the admin role to perform **any action on any resource**.
@@ -270,15 +323,23 @@ Policies can include conditions.
 Syntax:
 
 ```
-allow <role> <action> <resource>
-condition <condition>
+rule
+  role <role>
+  action <action>
+  resource <resource>
+  condition <condition1> OR <condition2>
+end
 ```
 
 Example:
 
 ```
-allow broker edit listing
-condition listing.owner_id == user.id
+rule
+  role user
+  action view
+  resource listing
+  condition listing.status == "public" OR listing.owner_id == user.id
+end
 ```
 
 Meaning:
@@ -300,8 +361,12 @@ Conditions can reference:
 Example:
 
 ```
-allow user edit profile
-condition user.id == resource.id
+rule
+  role user
+  action edit
+  resource profile
+  condition user.id == resource.id
+end
 ```
 
 ---
@@ -311,11 +376,23 @@ condition user.id == resource.id
 ## Example 1 – Basic Roles
 
 ```
-allow admin *
+rule
+  role admin
+  action *
+  resource *
+end
 
-allow user view listing
+rule
+  role broker
+  action publish
+  resource listing
+end
 
-allow broker publish listing
+rule
+  role user
+  action edit
+  resource listing
+end
 ```
 
 ---
@@ -323,8 +400,12 @@ allow broker publish listing
 ## Example 2 – Ownership Rules
 
 ```
-allow broker edit listing
-condition listing.owner_id == user.id
+rule
+  role broker
+  action edit
+  resource listing
+  condition listing.owner_id == user.id
+end
 ```
 
 ---
@@ -332,14 +413,24 @@ condition listing.owner_id == user.id
 ## Example 3 – Multiple Rules
 
 ```
-allow admin *
+rule
+  role admin
+  action *
+  resource *
+end
 
-allow user view listing
+rule
+  role broker
+  action publish
+  resource listing
+end
 
-allow broker publish listing
-
-allow broker edit listing
-condition listing.owner_id == user.id
+rule
+  role user
+  action edit
+  resource listing
+  condition listing.owner_id == user.id
+end
 ```
 
 ---
@@ -352,18 +443,18 @@ Example user:
 
 ```javascript
 const user = {
-    id: 10,
-    roles: ["broker"]
-}
+  id: 10,
+  roles: ["broker"],
+};
 ```
 
 Multiple roles:
 
 ```javascript
 const user = {
-    id: 5,
-    roles: ["user","editor"]
-}
+  id: 5,
+  roles: ["user", "editor"],
+};
 ```
 
 The engine checks permissions against **all roles**.
@@ -375,7 +466,7 @@ The engine checks permissions against **all roles**.
 ## Load policy file
 
 ```javascript
-authz.load("./authz.toon")
+authz.load("./authz.toon");
 ```
 
 ---
@@ -383,13 +474,13 @@ authz.load("./authz.toon")
 ## Check permission
 
 ```javascript
-authz.can(user, action, resource, object)
+authz.can(user, action, resource, object);
 ```
 
 Example:
 
 ```javascript
-authz.can(user,"edit","listing",listing)
+authz.can(user, "edit", "listing", listing);
 ```
 
 Returns:
@@ -410,22 +501,22 @@ User:
 ```javascript
 const user = {
   id: 10,
-  roles: ["broker"]
-}
+  roles: ["broker"],
+};
 ```
 
 Listing:
 
 ```javascript
 const listing = {
-  owner_id: 10
-}
+  owner_id: 10,
+};
 ```
 
 Permission check:
 
 ```javascript
-authz.can(user,"edit","listing",listing)
+authz.can(user, "edit", "listing", listing);
 ```
 
 Result:
@@ -441,21 +532,15 @@ true
 Example route protection:
 
 ```javascript
-app.put("/listing/:id", async (req,res)=>{
+app.put("/listing/:id", async (req, res) => {
+  const allowed = authz.can(req.user, "edit", "listing", req.listing);
 
-    const allowed = authz.can(
-        req.user,
-        "edit",
-        "listing",
-        req.listing
-    )
+  if (!allowed) {
+    return res.status(403).send("Access denied");
+  }
 
-    if(!allowed){
-        return res.status(403).send("Access denied")
-    }
-
-    updateListing()
-})
+  updateListing();
+});
 ```
 
 ---
@@ -510,13 +595,13 @@ This reduces the risk of unintended access.
 
 Future versions may include:
 
-* Policy hot reloading
-* Role inheritance
-* Policy debugger
-* Middleware helpers
-* Permission caching
-* Modular policy files
-* Distributed policy storage
+- Policy hot reloading
+- Role inheritance
+- Policy debugger
+- Middleware helpers
+- Permission caching
+- Modular policy files
+- Distributed policy storage
 
 ---
 
@@ -542,6 +627,5 @@ This project is licensed under the [Apache 2.0 license](LICENSE).
 # Author
 
 Simple Authz was created to simplify authorization logic in modern Node.js applications.
-
 
 # Keywords
