@@ -14,5 +14,5 @@ rule
   role user
   action edit
   resource listing
-  condition listing.owner_id == user.id
+  condition listing.status == "public" OR listing.owner_id == user.id
 end
