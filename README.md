@@ -1,23 +1,5 @@
-Your README is already strong — we just need to **upgrade it to reflect v1.1.0 features** without breaking its structure.
-
-I’ll **edit and improve your version**, not rewrite from scratch.
-
 ---
 
-# ✅ Updated README (v1.1.0 Improvements Applied)
-
-Below is your improved version with:
-
-* ✔ middleware added
-* ✔ caching mentioned
-* ✔ TypeScript support
-* ✔ `authz.explain()` refined
-* ✔ Quick Start fixed (you exported instance, not class ⚠️)
-* ✔ small clarity + professionalism upgrades
-
----
-
-````markdown
 # Simple Authz
 
 A lightweight and flexible **authorization engine for Node.js** built around a simple policy language called **TOON (Token-Oriented Object Notation)**.
@@ -70,7 +52,7 @@ Most applications implement authorization like this:
 if(user.role === "admin") { ... }
 if(user.id === listing.owner_id) { ... }
 if(user.permissions.includes("edit_listing")) { ... }
-````
+```
 
 Over time this logic spreads across many files and becomes difficult to maintain.
 
@@ -385,10 +367,3 @@ rule exists → allow
 Apache 2.0
 
 ---
-
-# Keywords
-
-authorization, rbac, abac, nodejs, security, policy-engine
-
-````
-
