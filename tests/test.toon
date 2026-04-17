@@ -1,0 +1,37 @@
+# Admin full access
+rule
+    role admin
+    action *
+    resource *
+end
+
+# Broker can publish listing
+rule
+    role broker
+    action publish
+    resource listing
+end
+
+# User can edit own listing
+rule
+    role user
+    action edit
+    resource listing
+    condition listing.owner_id == user.id
+end
+
+# User can view listing if public OR owner
+rule
+    role user
+    action view
+    resource listing
+    condition listing.status == "public" OR listing.owner_id == user.id
+end
+
+# User cannot edit published listing (AND condition)
+rule
+    role user
+    action edit
+    resource listing
+    condition listing.owner_id == user.id AND listing.status != "published"
+end

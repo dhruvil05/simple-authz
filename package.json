@@ -1,11 +1,19 @@
 {
   "name": "simple-authz",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Lightweight policy-based authorization engine for Node.js using TOON policy language",
   "main": "lib/index.js",
   "scripts": {
-    "test": "node bin/test.js",
+    "test": "jest",
     "dev": "node lib/core/authz.js"
+  },
+  "bin": {
+    "simple-authz": "bin/simple-authz"
+  },
+  "devDependencies": {
+    "chalk": "^5.0.0",
+    "commander": "^11.0.0",
+    "jest": "^30.3.0"
   },
   "keywords": [
     "authorization",
@@ -22,6 +30,12 @@
     "authz",
     "role-based-access-control",
     "authorization-engine"
+  ],
+  "types": "types/index.d.ts",
+  "files": [
+    "lib/",
+    "types/",
+    "package.json"
   ],
   "author": "Dhruvil",
   "license": "Apache-2.0",
