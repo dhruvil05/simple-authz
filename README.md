@@ -189,6 +189,26 @@ app.post(
 );
 ```
 
+> ⚠️ **Security note:** by default the middleware checks against `req.body`.
+> That's fine for actions where the body *is* the thing being created, but
+> if your policy has conditions like `listing.owner_id == user.id`, a client
+> can put whatever `owner_id` it wants in its own request body and bypass
+> the check. Pass a third argument — an (optionally async) function that
+> loads the **real** resource from your database — whenever a condition
+> depends on data the client shouldn't be trusted to supply:
+>
+> ```javascript
+> app.post(
+>   "/listing/:id",
+>   authz.middleware("edit", "listing", async (req) => {
+>     return await db.listings.findById(req.params.id);
+>   }),
+>   (req, res) => {
+>     res.send("Allowed");
+>   }
+> );
+> ```
+
 ---
 
 # Core Concepts
@@ -217,6 +237,15 @@ rule
 end
 ```
 
+The parser is strict on purpose: a stray `end`, a `rule` opened twice without
+closing it, an unrecognized key (e.g. a typo'd `roel`), or a key with no
+value all throw a clear error with the line number, instead of silently
+dropping or mis-parsing part of your policy. `authz.load()` runs full
+validation too — every condition is actually compiled during validation, so
+a broken condition (missing operand, mixed `AND`/`OR`, etc.) is reported
+against its rule number at load time rather than failing later, mid-request,
+somewhere inside the evaluator.
+
 ---
 
 # Wildcards
@@ -235,6 +264,18 @@ Example:
 ```
 condition listing.owner_id == user.id AND listing.status != "published"
 ```
+
+Chains of any length work: `a == 1 AND b == 2 AND c == 3`. You can also
+compare against numbers and booleans directly (`listing.views > 100`), not
+just strings.
+
+Only one operator type per condition — `AND` and `OR` can't be mixed in the
+same condition (`a == 1 AND b == 2 OR c == 3` throws an error). Split that
+into two separate rules instead.
+
+String literals are quote-safe: a value like
+`doc.title == "Terms AND Conditions"` is treated as one literal, not
+accidentally split on the "AND" inside it.
 
 ---
 
@@ -323,7 +364,33 @@ project/
 * Rules compiled into indexed structure
 * AST-based condition evaluation
 * O(1) permission lookup
-* Built-in caching layer
+* Built-in LRU cache with TTL-based expiration, keyed by user + action +
+  resource + object id (falls back to a data snapshot if there's no id)
+
+**Caching caveat:** because the cache keys on object *identity* (id/owner_id),
+if a resource's *other* fields change while its id stays the same (e.g. a
+document gets locked) within the TTL window, a stale decision can be served.
+Call `authz.clearCache()` right after any write that could flip a condition's
+outcome, or lower `cacheTTL` / set `cacheEnabled: false` for policies with
+conditions on fast-changing fields:
+
+```javascript
+const authz = new Authz({ cacheEnabled: true, cacheSize: 1000, cacheTTL: 60 });
+```
+
+---
+
+# CLI
+
+```bash
+npx simple-authz validate ./policies/authz.toon
+npx simple-authz check ./policies/authz.toon --user '{"id":1,"roles":["user"]}' --action edit --resource listing --context '{"owner_id":1}'
+npx simple-authz benchmark ./policies/authz.toon --iterations 10000
+```
+
+* `validate` — parses and validates a policy file, lists roles found
+* `check` — runs `authz.explain()` against a policy and prints the decision
+* `benchmark` — runs repeated checks and prints throughput + cache stats
 
 ---
 
@@ -342,7 +409,6 @@ rule exists → allow
 
 ### v1.2
 
-* CLI tool
 * Role hierarchy
 * Modular policies
 

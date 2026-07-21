@@ -1,0 +1,22 @@
+# Admin full access
+rule
+    role admin
+    action *
+    resource *
+end
+
+# User can view an article once it has more than 100 views (numeric literal)
+rule
+    role user
+    action view
+    resource article
+    condition article.views > 100
+end
+
+# User can publish own draft article, unless it's flagged (3-clause AND chain)
+rule
+    role user
+    action publish
+    resource article
+    condition article.owner_id == user.id AND article.status == "draft" AND article.flagged == "false"
+end

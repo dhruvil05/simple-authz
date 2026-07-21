@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { program } = require('commander');
-const Authz = require('../lib/authz');
+const Authz = require('../../lib/core/authz');
 const chalk = require('chalk'); // for colored output
 const path = require('path');
 
@@ -52,8 +52,10 @@ program
                 console.log(chalk.red('✗ DENIED\n'));
             }
 
+            const userRoles = user.roles || (user.role ? [user.role] : []);
+
             console.log(`  User ID:        ${chalk.blue(user.id)}`);
-            console.log(`  User roles:     ${chalk.blue(user.roles.join(', '))}`);
+            console.log(`  User roles:     ${chalk.blue(userRoles.join(', '))}`);
             console.log(`  Action:         ${chalk.blue(options.action)}`);
             console.log(`  Resource:       ${chalk.blue(options.resource)}`);
             console.log(`  Reason:         ${chalk.yellow(result.reason)}`);
